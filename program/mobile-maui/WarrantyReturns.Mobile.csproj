@@ -13,4 +13,8 @@
     <ApplicationVersion>1</ApplicationVersion>
     <SupportedOSPlatformVersion>23.0</SupportedOSPlatformVersion>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Maui.Controls" Version="8.0.100" />
+  </ItemGroup>
 </Project>

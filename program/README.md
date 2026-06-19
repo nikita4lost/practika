@@ -14,8 +14,21 @@
 2. Убедиться, что установлены workloads:
    - `.NET desktop development`;
    - `.NET Multi-platform App UI development`.
-3. Для запуска десктопной версии выбрать проект `WarrantyReturns.Desktop`.
-4. Для запуска мобильной версии выбрать проект `WarrantyReturns.Mobile` и Android Emulator / устройство.
+3. Для мобильной сборки в Visual Studio Installer также должны быть установлены компоненты Android:
+   - `Android SDK setup`;
+   - `Android SDK Platform`;
+   - `Android Emulator`;
+   - `Microsoft.Android` / .NET Android workload.
+4. Для запуска десктопной версии выбрать проект `WarrantyReturns.Desktop`.
+5. Для запуска мобильной версии выбрать проект `WarrantyReturns.Mobile` и Android Emulator / устройство.
+
+Если при сборке мобильного проекта появляется ошибка:
+
+```text
+NETSDK1127: пакет нацеливания Microsoft.Android не установлен
+```
+
+нужно открыть **Visual Studio Installer → Modify / Изменить → Individual components / Отдельные компоненты** и установить Android-компоненты для .NET MAUI. После установки перезапустить Visual Studio и выполнить **Restore NuGet Packages**.
 
 ## Десктопное приложение
 
