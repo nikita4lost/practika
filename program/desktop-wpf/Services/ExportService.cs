@@ -93,7 +93,7 @@ public sealed class ExportService
         var rows = new StringBuilder();
         var allRows = new List<string[]>
         {
-            ["ID", "Клиент", "Телефон", "Товар", "Причина", "Статус", "Сумма", "Дата"]
+            new[] { "ID", "Клиент", "Телефон", "Товар", "Причина", "Статус", "Сумма", "Дата" }
         };
         allRows.AddRange(cases.Select(x => new[]
         {

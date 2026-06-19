@@ -22,7 +22,7 @@ public sealed class CaseStore
         }
 
         var json = await File.ReadAllTextAsync(_localFile);
-        return JsonSerializer.Deserialize<List<WarrantyCase>>(json, JsonOptions) ?? [];
+        return JsonSerializer.Deserialize<List<WarrantyCase>>(json, JsonOptions) ?? new List<WarrantyCase>();
     }
 
     public async Task SaveAsync(IEnumerable<WarrantyCase> cases)
@@ -41,8 +41,8 @@ public sealed class CaseStore
 
     private static List<WarrantyCase> CreateDemoCases()
     {
-        return
-        [
+        return new List<WarrantyCase>
+        {
             new WarrantyCase
             {
                 Id = "ВР-260619-001",
@@ -69,6 +69,6 @@ public sealed class CaseStore
                 RequiresSupplierApproval = true,
                 ManagerComment = "Клиент просит ускорить диагностику"
             }
-        ];
+        };
     }
 }

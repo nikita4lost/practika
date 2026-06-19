@@ -7,7 +7,7 @@ namespace WarrantyReturns.Mobile;
 public partial class MainPage : ContentPage
 {
     private readonly CaseStore _store = new();
-    private readonly ObservableCollection<WarrantyCase> _cases = [];
+    private readonly ObservableCollection<WarrantyCase> _cases = new();
 
     public MainPage()
     {

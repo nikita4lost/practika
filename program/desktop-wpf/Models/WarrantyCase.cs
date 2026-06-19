@@ -17,19 +17,19 @@ public sealed class WarrantyCase
     public DateTime UpdatedAt { get; set; } = DateTime.Now;
 
     public static readonly string[] Reasons =
-    [
+    {
         "Брак",
         "Не подошла модель",
         "Ошибка в описании",
         "Неисправность при эксплуатации"
-    ];
+    };
 
     public static readonly string[] Statuses =
-    [
+    {
         "Принято",
         "На диагностике",
         "Ремонт",
         "Возврат средств/Обмен",
         "Отказ"
-    ];
+    };
 }

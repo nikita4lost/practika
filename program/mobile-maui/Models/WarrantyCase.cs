@@ -17,11 +17,11 @@ public sealed class WarrantyCase
     public DateTime UpdatedAt { get; set; } = DateTime.Now;
 
     public static readonly string[] Statuses =
-    [
+    {
         "Принято",
         "На диагностике",
         "Ремонт",
         "Возврат средств/Обмен",
         "Отказ"
-    ];
+    };
 }
