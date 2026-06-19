@@ -22,7 +22,7 @@ public sealed class CaseStorage
         var appData = Path.Combine(baseDir, "data");
         Directory.CreateDirectory(appData);
 
-        var cloudDir = Path.GetFullPath(Path.Combine(baseDir, "..", "..", "..", "..", "cloud"));
+        var cloudDir = Path.GetFullPath(Path.Combine(baseDir, "..", "..", "..", "..", "..", "cloud"));
         Directory.CreateDirectory(cloudDir);
 
         _dataFile = Path.Combine(appData, "local_cases.json");

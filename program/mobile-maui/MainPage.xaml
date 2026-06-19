@@ -1,0 +1,63 @@
+<ContentPage x:Class="WarrantyReturns.Mobile.MainPage"
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             Title="Заявки инженера">
+    <Grid RowDefinitions="Auto,Auto,*" Padding="16" RowSpacing="12">
+        <VerticalStackLayout Grid.Row="0" Spacing="4">
+            <Label Text="Сервисный центр - гарантия"
+                   FontSize="24"
+                   FontAttributes="Bold"
+                   TextColor="#2457A7" />
+            <Label Text="Мобильное приложение инженера сервисного центра"
+                   FontSize="14"
+                   TextColor="#64748B" />
+        </VerticalStackLayout>
+
+        <Grid Grid.Row="1" ColumnDefinitions="*,Auto" ColumnSpacing="8">
+            <Picker x:Name="StatusPicker"
+                    Title="Фильтр по статусу"
+                    SelectedIndexChanged="StatusPicker_OnSelectedIndexChanged" />
+            <Button Grid.Column="1"
+                    Text="Обновить"
+                    Clicked="ReloadButton_OnClicked" />
+        </Grid>
+
+        <CollectionView x:Name="CasesView"
+                        Grid.Row="2"
+                        SelectionMode="Single"
+                        SelectionChanged="CasesView_OnSelectionChanged">
+            <CollectionView.EmptyView>
+                <Label Text="Заявок не найдено"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center"
+                       TextColor="#64748B" />
+            </CollectionView.EmptyView>
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Border Stroke="#CBD5E1"
+                            StrokeThickness="1"
+                            BackgroundColor="#F8FAFC"
+                            Padding="12"
+                            Margin="0,0,0,10">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="12" />
+                        </Border.StrokeShape>
+                        <VerticalStackLayout Spacing="5">
+                            <Label Text="{Binding Id}"
+                                   FontAttributes="Bold"
+                                   TextColor="#2457A7" />
+                            <Label Text="{Binding ProductName}"
+                                   FontAttributes="Bold"
+                                   FontSize="17" />
+                            <Label Text="{Binding SerialNumber, StringFormat='SN: {0}'}" />
+                            <Label Text="{Binding Status, StringFormat='Статус: {0}'}" />
+                            <Label Text="{Binding Reason, StringFormat='Причина: {0}'}" />
+                            <Label Text="{Binding ManagerComment, StringFormat='Комментарий: {0}'}"
+                                   TextColor="#64748B" />
+                        </VerticalStackLayout>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
+</ContentPage>
