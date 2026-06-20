@@ -1,5 +1,3 @@
-using Microsoft.Extensions.Logging;
-
 namespace WarrantyReturns.Mobile;
 
 public static class MauiProgram
@@ -9,10 +7,6 @@ public static class MauiProgram
         var builder = MauiApp.CreateBuilder();
         builder
             .UseMauiApp<App>();
-
-#if DEBUG
-        builder.Logging.AddDebug();
-#endif
 
         return builder.Build();
     }
