@@ -1,0 +1,81 @@
+<ContentPage x:Class="WarrantyReturns.Mobile.MainPage"
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             Title="Заявки инженера">
+    <Grid RowDefinitions="Auto,Auto,Auto,*" Padding="16" RowSpacing="12">
+        <VerticalStackLayout Grid.Row="0" Spacing="4">
+            <Label Text="Сервисный центр - гарантия"
+                   FontSize="24"
+                   FontAttributes="Bold"
+                   TextColor="#2457A7" />
+            <Label Text="Мобильное приложение инженера сервисного центра"
+                   FontSize="14"
+                   TextColor="#64748B" />
+        </VerticalStackLayout>
+
+        <SearchBar x:Name="SearchBar"
+                   Grid.Row="1"
+                   Placeholder="Поиск по товару или серийному номеру"
+                   TextChanged="SearchBar_OnTextChanged" />
+
+        <Grid Grid.Row="2" ColumnDefinitions="*,*,Auto,Auto" ColumnSpacing="8">
+            <Picker x:Name="StatusPicker"
+                    Title="Фильтр по статусу"
+                    SelectedIndexChanged="StatusPicker_OnSelectedIndexChanged" />
+            <Picker x:Name="ReasonPicker"
+                    Grid.Column="1"
+                    Title="Фильтр по причине"
+                    SelectedIndexChanged="ReasonPicker_OnSelectedIndexChanged" />
+            <Button Grid.Column="2"
+                    Text="Статистика"
+                    Clicked="StatsButton_OnClicked" />
+            <Button Grid.Column="3"
+                    Text="Обновить"
+                    Clicked="ReloadButton_OnClicked" />
+        </Grid>
+
+        <CollectionView x:Name="CasesView"
+                        Grid.Row="3"
+                        SelectionMode="Single"
+                        SelectionChanged="CasesView_OnSelectionChanged">
+            <CollectionView.EmptyView>
+                <Label Text="Заявок не найдено"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center"
+                       TextColor="#64748B" />
+            </CollectionView.EmptyView>
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Border Stroke="#CBD5E1"
+                            StrokeThickness="1"
+                            BackgroundColor="#F8FAFC"
+                            Padding="12"
+                            Margin="0,0,0,10">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="12" />
+                        </Border.StrokeShape>
+                        <VerticalStackLayout Spacing="5">
+                            <Label Text="{Binding Id}"
+                                   FontAttributes="Bold"
+                                   TextColor="#2457A7" />
+                            <Label Text="{Binding ProductName}"
+                                   FontAttributes="Bold"
+                                   FontSize="17"
+                                   TextColor="#111827" />
+                            <Label Text="{Binding SerialNumber, StringFormat='SN: {0}'}"
+                                   TextColor="#111827" />
+                            <Label Text="{Binding ReceivedAt, StringFormat='Дата приёма: {0:dd.MM.yyyy}'}"
+                                   TextColor="#111827" />
+                            <Label Text="{Binding Status, StringFormat='Статус: {0}'}"
+                                   TextColor="#111827" />
+                            <Label Text="{Binding Reason, StringFormat='Причина: {0}'}"
+                                   TextColor="#111827" />
+                            <Label Text="{Binding ExternalComment, StringFormat='Комментарий менеджера: {0}'}"
+                                   TextColor="#64748B" />
+                        </VerticalStackLayout>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
+</ContentPage>

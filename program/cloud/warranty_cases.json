@@ -1,0 +1,34 @@
+[
+  {
+    "Id": "ВР-260619-001",
+    "ClientName": "Иванов Иван",
+    "Phone": "+79000000001",
+    "ProductName": "Паяльник ZD-99",
+    "SerialNumber": "ZD9917-26",
+    "Reason": "Неисправность при эксплуатации",
+    "Status": "Ремонт",
+    "CheckSum": 2400,
+    "ReceivedAt": "2026-06-19T09:15:00",
+    "RequiresSupplierApproval": false,
+    "InternalComment": "Проверить историю покупок клиента",
+    "ExternalComment": "Комплект полный, есть чек",
+    "TechnicalConclusion": "Требуется замена нагревательного элемента",
+    "UpdatedAt": "2026-06-19T10:20:00"
+  },
+  {
+    "Id": "ВР-260619-002",
+    "ClientName": "ООО Радио",
+    "Phone": "+79000000002",
+    "ProductName": "STM32F103",
+    "SerialNumber": "STM-103-26",
+    "Reason": "Брак",
+    "Status": "На диагностике",
+    "CheckSum": 1350,
+    "ReceivedAt": "2026-06-19T09:40:00",
+    "RequiresSupplierApproval": true,
+    "InternalComment": "Возможна партия с браком",
+    "ExternalComment": "Клиент просит ускорить диагностику",
+    "TechnicalConclusion": "",
+    "UpdatedAt": "2026-06-19T10:25:00"
+  }
+]
