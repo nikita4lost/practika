@@ -11,10 +11,13 @@
     <ApplicationId>com.component.warrantyreturns</ApplicationId>
     <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
     <ApplicationVersion>1</ApplicationVersion>
+    <AndroidManifest>Platforms\Android\AndroidManifest.xml</AndroidManifest>
     <SupportedOSPlatformVersion>23.0</SupportedOSPlatformVersion>
   </PropertyGroup>
 
   <ItemGroup>
+    <MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#2457A7" />
+    <MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#2457A7" BaseSize="128,128" />
     <PackageReference Include="Microsoft.Maui.Controls" Version="8.0.100" />
   </ItemGroup>
 </Project>
