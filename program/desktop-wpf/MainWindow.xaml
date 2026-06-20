@@ -36,7 +36,7 @@
             </Grid.ColumnDefinitions>
 
             <DockPanel Grid.Column="0">
-                <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,0,0,10">
+                <WrapPanel DockPanel.Dock="Top" Margin="0,0,0,10">
                     <TextBox x:Name="SearchBox"
                              Width="260"
                              Margin="0,0,8,0"
@@ -47,8 +47,20 @@
                               Width="190"
                               Margin="0,0,8,0"
                               SelectionChanged="StatusFilterBox_OnSelectionChanged" />
+                    <ComboBox x:Name="ReasonFilterBox"
+                              Width="210"
+                              Margin="0,0,8,0"
+                              SelectionChanged="ReasonFilterBox_OnSelectionChanged" />
+                    <DatePicker x:Name="DateFromPicker"
+                                Width="130"
+                                Margin="0,0,8,0"
+                                SelectedDateChanged="DateFilter_OnSelectedDateChanged" />
+                    <DatePicker x:Name="DateToPicker"
+                                Width="130"
+                                Margin="0,0,8,0"
+                                SelectedDateChanged="DateFilter_OnSelectedDateChanged" />
                     <Button Content="Сбросить" Width="90" Click="ResetFilter_OnClick" />
-                </StackPanel>
+                </WrapPanel>
 
                 <DataGrid x:Name="CasesGrid"
                           AutoGenerateColumns="False"
@@ -62,6 +74,7 @@
                         <DataGridTextColumn Header="Товар" Binding="{Binding ProductName}" Width="180" />
                         <DataGridTextColumn Header="Причина" Binding="{Binding Reason}" Width="180" />
                         <DataGridTextColumn Header="Статус" Binding="{Binding Status}" Width="150" />
+                        <DataGridTextColumn Header="Дата" Binding="{Binding ReceivedAt, StringFormat=dd.MM.yyyy}" Width="100" />
                         <DataGridTextColumn Header="Сумма" Binding="{Binding CheckSum}" Width="90" />
                     </DataGrid.Columns>
                 </DataGrid>
@@ -93,12 +106,22 @@
                         <TextBlock Text="Сумма чека" />
                         <TextBox x:Name="SumBox" Margin="0,4,0,10" />
 
+                        <TextBlock Text="Дата приёма товара" />
+                        <DatePicker x:Name="ReceivedDatePicker" Margin="0,4,0,10" />
+
                         <CheckBox x:Name="SupplierApprovalBox"
                                   Content="Требует согласования с поставщиком"
                                   Margin="0,0,0,10" />
 
-                        <TextBlock Text="Комментарий менеджера" />
-                        <TextBox x:Name="CommentBox"
+                        <TextBlock Text="Внутренний комментарий менеджера (до 400 символов)" />
+                        <TextBox x:Name="InternalCommentBox"
+                                 Height="70"
+                                 TextWrapping="Wrap"
+                                 AcceptsReturn="True"
+                                 Margin="0,4,0,10" />
+
+                        <TextBlock Text="Внешний комментарий для инженера/клиента (до 300 символов)" />
+                        <TextBox x:Name="ExternalCommentBox"
                                  Height="70"
                                  TextWrapping="Wrap"
                                  AcceptsReturn="True"
@@ -116,6 +139,7 @@
                             <Button Content="Сохранить" Width="100" Margin="0,0,8,8" Click="SaveCase_OnClick" />
                             <Button Content="Удалить" Width="90" Margin="0,0,8,8" Click="DeleteCase_OnClick" />
                             <Button Content="Синхр." Width="90" Margin="0,0,8,8" Click="Sync_OnClick" />
+                            <Button Content="Аналитика" Width="100" Margin="0,0,8,8" Click="Analytics_OnClick" />
                             <Button Content="DOCX" Width="80" Margin="0,0,8,8" Click="ExportDocx_OnClick" />
                             <Button Content="XLSX" Width="80" Margin="0,0,8,8" Click="ExportXlsx_OnClick" />
                         </WrapPanel>

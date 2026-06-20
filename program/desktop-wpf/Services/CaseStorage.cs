@@ -75,14 +75,15 @@ public sealed class CaseStorage
             new WarrantyCase
             {
                 Id = "ВР-260619-001",
-                ClientName = "Иванов И.И.",
+                ClientName = "Иванов Иван",
                 Phone = "+79000000001",
                 ProductName = "Паяльник ZD-99",
                 SerialNumber = "ZD9917-26",
                 Reason = "Неисправность при эксплуатации",
                 Status = "Ремонт",
                 CheckSum = 2400,
-                ManagerComment = "Комплект полный, есть чек"
+                InternalComment = "Проверить историю покупок клиента",
+                ExternalComment = "Комплект полный, есть чек"
             },
             new WarrantyCase
             {
@@ -95,7 +96,8 @@ public sealed class CaseStorage
                 Status = "На диагностике",
                 CheckSum = 1350,
                 RequiresSupplierApproval = true,
-                ManagerComment = "Клиент просит ускорить диагностику"
+                InternalComment = "Возможна партия с браком",
+                ExternalComment = "Клиент просит ускорить диагностику"
             }
         };
     }

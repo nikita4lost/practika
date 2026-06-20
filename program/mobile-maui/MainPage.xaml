@@ -2,7 +2,7 @@
              xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              Title="Заявки инженера">
-    <Grid RowDefinitions="Auto,Auto,*" Padding="16" RowSpacing="12">
+    <Grid RowDefinitions="Auto,Auto,Auto,*" Padding="16" RowSpacing="12">
         <VerticalStackLayout Grid.Row="0" Spacing="4">
             <Label Text="Сервисный центр - гарантия"
                    FontSize="24"
@@ -13,17 +13,29 @@
                    TextColor="#64748B" />
         </VerticalStackLayout>
 
-        <Grid Grid.Row="1" ColumnDefinitions="*,Auto" ColumnSpacing="8">
+        <SearchBar x:Name="SearchBar"
+                   Grid.Row="1"
+                   Placeholder="Поиск по товару или серийному номеру"
+                   TextChanged="SearchBar_OnTextChanged" />
+
+        <Grid Grid.Row="2" ColumnDefinitions="*,*,Auto,Auto" ColumnSpacing="8">
             <Picker x:Name="StatusPicker"
                     Title="Фильтр по статусу"
                     SelectedIndexChanged="StatusPicker_OnSelectedIndexChanged" />
-            <Button Grid.Column="1"
+            <Picker x:Name="ReasonPicker"
+                    Grid.Column="1"
+                    Title="Фильтр по причине"
+                    SelectedIndexChanged="ReasonPicker_OnSelectedIndexChanged" />
+            <Button Grid.Column="2"
+                    Text="Статистика"
+                    Clicked="StatsButton_OnClicked" />
+            <Button Grid.Column="3"
                     Text="Обновить"
                     Clicked="ReloadButton_OnClicked" />
         </Grid>
 
         <CollectionView x:Name="CasesView"
-                        Grid.Row="2"
+                        Grid.Row="3"
                         SelectionMode="Single"
                         SelectionChanged="CasesView_OnSelectionChanged">
             <CollectionView.EmptyView>
@@ -50,9 +62,10 @@
                                    FontAttributes="Bold"
                                    FontSize="17" />
                             <Label Text="{Binding SerialNumber, StringFormat='SN: {0}'}" />
+                            <Label Text="{Binding ReceivedAt, StringFormat='Дата приёма: {0:dd.MM.yyyy}'}" />
                             <Label Text="{Binding Status, StringFormat='Статус: {0}'}" />
                             <Label Text="{Binding Reason, StringFormat='Причина: {0}'}" />
-                            <Label Text="{Binding ManagerComment, StringFormat='Комментарий: {0}'}"
+                            <Label Text="{Binding ExternalComment, StringFormat='Комментарий менеджера: {0}'}"
                                    TextColor="#64748B" />
                         </VerticalStackLayout>
                     </Border>

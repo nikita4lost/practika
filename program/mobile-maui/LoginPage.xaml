@@ -1,0 +1,26 @@
+<ContentPage x:Class="WarrantyReturns.Mobile.LoginPage"
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             Title="Авторизация">
+    <Grid Padding="24" RowDefinitions="*,Auto,*">
+        <VerticalStackLayout Grid.Row="1" Spacing="14">
+            <Label Text="Сервисный центр - гарантия"
+                   FontSize="26"
+                   FontAttributes="Bold"
+                   TextColor="#2457A7"
+                   HorizontalTextAlignment="Center" />
+            <Label Text="Вход под ролью engineer"
+                   TextColor="#64748B"
+                   HorizontalTextAlignment="Center" />
+            <Entry x:Name="LoginEntry"
+                   Placeholder="Логин"
+                   Text="engineer" />
+            <Entry x:Name="PasswordEntry"
+                   Placeholder="Пароль"
+                   IsPassword="True"
+                   Text="engineer123" />
+            <Button Text="Войти"
+                    Clicked="LoginButton_OnClicked" />
+        </VerticalStackLayout>
+    </Grid>
+</ContentPage>

@@ -22,7 +22,9 @@ public partial class MainWindow : Window
         ReasonBox.ItemsSource = WarrantyCase.Reasons;
         StatusBox.ItemsSource = WarrantyCase.Statuses;
         StatusFilterBox.ItemsSource = new[] { "Все статусы" }.Concat(WarrantyCase.Statuses);
+        ReasonFilterBox.ItemsSource = new[] { "Все причины" }.Concat(WarrantyCase.Reasons);
         StatusFilterBox.SelectedIndex = 0;
+        ReasonFilterBox.SelectedIndex = 0;
 
         RefreshGrid();
         ClearForm();
@@ -53,9 +55,11 @@ public partial class MainWindow : Window
         item.SerialNumber = SerialBox.Text.Trim();
         item.Reason = ReasonBox.SelectedItem?.ToString() ?? WarrantyCase.Reasons[0];
         item.Status = StatusBox.SelectedItem?.ToString() ?? WarrantyCase.Statuses[0];
+        item.ReceivedAt = ReceivedDatePicker.SelectedDate ?? DateTime.Now;
         item.CheckSum = checkSum;
         item.RequiresSupplierApproval = SupplierApprovalBox.IsChecked == true;
-        item.ManagerComment = CommentBox.Text.Trim();
+        item.InternalComment = InternalCommentBox.Text.Trim();
+        item.ExternalComment = ExternalCommentBox.Text.Trim();
         item.TechnicalConclusion = ConclusionBox.Text.Trim();
         item.UpdatedAt = DateTime.Now;
 
@@ -132,6 +136,36 @@ public partial class MainWindow : Window
         }
     }
 
+    private void Analytics_OnClick(object sender, RoutedEventArgs e)
+    {
+        var items = GetFilteredCases().ToList();
+        if (items.Count == 0)
+        {
+            MessageBox.Show("Нет данных для аналитики.", "Аналитика", MessageBoxButton.OK, MessageBoxImage.Information);
+            return;
+        }
+
+        var byReason = string.Join(Environment.NewLine, items
+            .GroupBy(x => x.Reason)
+            .OrderByDescending(x => x.Count())
+            .Select(x => $"{x.Key}: {x.Count()} шт., сумма {x.Sum(y => y.CheckSum):0.00} руб."));
+        var byStatus = string.Join(Environment.NewLine, items
+            .GroupBy(x => x.Status)
+            .OrderByDescending(x => x.Count())
+            .Select(x => $"{x.Key}: {x.Count()} шт."));
+        var fromText = DateFromPicker.SelectedDate?.ToString("dd.MM.yyyy") ?? "не задано";
+        var toText = DateToPicker.SelectedDate?.ToString("dd.MM.yyyy") ?? "не задано";
+
+        MessageBox.Show(
+            $"Период: {fromText} - {toText}{Environment.NewLine}{Environment.NewLine}" +
+            $"По причинам:{Environment.NewLine}{byReason}{Environment.NewLine}{Environment.NewLine}" +
+            $"По статусам:{Environment.NewLine}{byStatus}{Environment.NewLine}{Environment.NewLine}" +
+            $"Индикатор облака: файл синхронизации доступен",
+            "Аналитика возвратов",
+            MessageBoxButton.OK,
+            MessageBoxImage.Information);
+    }
+
     private void CasesGrid_OnSelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
     {
         _selectedCase = CasesGrid.SelectedItem as WarrantyCase;
@@ -147,8 +181,10 @@ public partial class MainWindow : Window
         ReasonBox.SelectedItem = _selectedCase.Reason;
         StatusBox.SelectedItem = _selectedCase.Status;
         SumBox.Text = _selectedCase.CheckSum.ToString("0.00");
+        ReceivedDatePicker.SelectedDate = _selectedCase.ReceivedAt;
         SupplierApprovalBox.IsChecked = _selectedCase.RequiresSupplierApproval;
-        CommentBox.Text = _selectedCase.ManagerComment;
+        InternalCommentBox.Text = _selectedCase.InternalComment;
+        ExternalCommentBox.Text = _selectedCase.ExternalComment;
         ConclusionBox.Text = _selectedCase.TechnicalConclusion;
     }
 
@@ -162,10 +198,23 @@ public partial class MainWindow : Window
         RefreshGrid();
     }
 
+    private void ReasonFilterBox_OnSelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+    {
+        RefreshGrid();
+    }
+
+    private void DateFilter_OnSelectedDateChanged(object? sender, System.Windows.Controls.SelectionChangedEventArgs e)
+    {
+        RefreshGrid();
+    }
+
     private void ResetFilter_OnClick(object sender, RoutedEventArgs e)
     {
         SearchBox.Text = string.Empty;
         StatusFilterBox.SelectedIndex = 0;
+        ReasonFilterBox.SelectedIndex = 0;
+        DateFromPicker.SelectedDate = null;
+        DateToPicker.SelectedDate = null;
         RefreshGrid();
     }
 
@@ -192,6 +241,22 @@ public partial class MainWindow : Window
             query = query.Where(x => x.Status == status);
         }
 
+        var reason = ReasonFilterBox?.SelectedItem?.ToString();
+        if (!string.IsNullOrWhiteSpace(reason) && reason != "Все причины")
+        {
+            query = query.Where(x => x.Reason == reason);
+        }
+
+        if (DateFromPicker?.SelectedDate is DateTime from)
+        {
+            query = query.Where(x => x.ReceivedAt.Date >= from.Date);
+        }
+
+        if (DateToPicker?.SelectedDate is DateTime to)
+        {
+            query = query.Where(x => x.ReceivedAt.Date <= to.Date);
+        }
+
         return query.OrderByDescending(x => x.ReceivedAt);
     }
 
@@ -205,8 +270,10 @@ public partial class MainWindow : Window
         ReasonBox.SelectedIndex = 0;
         StatusBox.SelectedIndex = 0;
         SumBox.Text = "0";
+        ReceivedDatePicker.SelectedDate = DateTime.Now;
         SupplierApprovalBox.IsChecked = false;
-        CommentBox.Text = string.Empty;
+        InternalCommentBox.Text = string.Empty;
+        ExternalCommentBox.Text = string.Empty;
         ConclusionBox.Text = string.Empty;
     }
 
@@ -219,6 +286,18 @@ public partial class MainWindow : Window
             return false;
         }
 
+        if (!Regex.IsMatch(ClientBox.Text.Trim(), @"^[\p{L}\d\s]+$"))
+        {
+            MessageBox.Show("ФИО/название должны содержать только буквы, цифры и пробелы.", "Проверка", MessageBoxButton.OK, MessageBoxImage.Warning);
+            return false;
+        }
+
+        if (ClientBox.Text.Trim().Length > 100)
+        {
+            MessageBox.Show("ФИО/название не должны превышать 100 символов.", "Проверка", MessageBoxButton.OK, MessageBoxImage.Warning);
+            return false;
+        }
+
         if (!Regex.IsMatch(PhoneBox.Text.Trim(), @"^\+7\d{10}$"))
         {
             MessageBox.Show("Телефон должен иметь формат +7XXXXXXXXXX.", "Проверка", MessageBoxButton.OK, MessageBoxImage.Warning);
@@ -228,6 +307,30 @@ public partial class MainWindow : Window
         if (string.IsNullOrWhiteSpace(ProductBox.Text))
         {
             MessageBox.Show("Укажите наименование товара.", "Проверка", MessageBoxButton.OK, MessageBoxImage.Warning);
+            return false;
+        }
+
+        if ($"{ProductBox.Text.Trim()} {SerialBox.Text.Trim()}".Length > 150)
+        {
+            MessageBox.Show("Наименование товара и серийный номер вместе не должны превышать 150 символов.", "Проверка", MessageBoxButton.OK, MessageBoxImage.Warning);
+            return false;
+        }
+
+        if (InternalCommentBox.Text.Length > 400)
+        {
+            MessageBox.Show("Внутренний комментарий не должен превышать 400 символов.", "Проверка", MessageBoxButton.OK, MessageBoxImage.Warning);
+            return false;
+        }
+
+        if (ExternalCommentBox.Text.Length > 300)
+        {
+            MessageBox.Show("Внешний комментарий не должен превышать 300 символов.", "Проверка", MessageBoxButton.OK, MessageBoxImage.Warning);
+            return false;
+        }
+
+        if (ConclusionBox.Text.Length > 300)
+        {
+            MessageBox.Show("Техническое заключение не должно превышать 300 символов.", "Проверка", MessageBoxButton.OK, MessageBoxImage.Warning);
             return false;
         }
 

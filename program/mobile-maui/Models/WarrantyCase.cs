@@ -12,7 +12,13 @@ public sealed class WarrantyCase
     public decimal CheckSum { get; set; }
     public DateTime ReceivedAt { get; set; } = DateTime.Now;
     public bool RequiresSupplierApproval { get; set; }
-    public string ManagerComment { get; set; } = string.Empty;
+    public string InternalComment { get; set; } = string.Empty;
+    public string ExternalComment { get; set; } = string.Empty;
+    public string ManagerComment
+    {
+        get => ExternalComment;
+        set => ExternalComment = value;
+    }
     public string TechnicalConclusion { get; set; } = string.Empty;
     public DateTime UpdatedAt { get; set; } = DateTime.Now;
 
@@ -23,5 +29,13 @@ public sealed class WarrantyCase
         "Ремонт",
         "Возврат средств/Обмен",
         "Отказ"
+    };
+
+    public static readonly string[] Reasons =
+    {
+        "Брак",
+        "Не подошла модель",
+        "Ошибка в описании",
+        "Неисправность при эксплуатации"
     };
 }

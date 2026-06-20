@@ -27,14 +27,23 @@ public sealed class ExportService
             """);
 
         var rows = new StringBuilder();
-        foreach (var item in cases)
+        var currentStatus = string.Empty;
+        foreach (var item in cases.OrderBy(x => x.Status).ThenByDescending(x => x.ReceivedAt))
         {
+            if (currentStatus != item.Status)
+            {
+                currentStatus = item.Status;
+                rows.Append("<w:tr><w:tc><w:p><w:r><w:t>");
+                rows.Append(SecurityElement.Escape($"Статус: {currentStatus}"));
+                rows.Append("</w:t></w:r></w:p></w:tc></w:tr>");
+            }
+
             rows.Append("<w:tr>");
             foreach (var cell in new[]
                      {
                          item.Id, item.ClientName, item.Phone, item.ProductName, item.Reason,
                          item.Status, item.CheckSum.ToString("0.00"), item.ReceivedAt.ToString("dd.MM.yyyy"),
-                         item.ManagerComment
+                         item.ExternalComment
                      })
             {
                 rows.Append("<w:tc><w:p><w:r><w:t>");
@@ -95,7 +104,7 @@ public sealed class ExportService
         {
             new[] { "ID", "Клиент", "Телефон", "Товар", "Причина", "Статус", "Сумма", "Дата" }
         };
-        allRows.AddRange(cases.Select(x => new[]
+        allRows.AddRange(cases.OrderBy(x => x.Status).ThenByDescending(x => x.ReceivedAt).Select(x => new[]
         {
             x.Id, x.ClientName, x.Phone, x.ProductName, x.Reason, x.Status,
             x.CheckSum.ToString("0.00"), x.ReceivedAt.ToString("dd.MM.yyyy")
